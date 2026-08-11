@@ -2,7 +2,7 @@ import type { ViewToggleProps } from '../types/Pokemon.types';
 
 const ViewToggle = ({ viewMode, onChange }: ViewToggleProps) => {
 	const baseButtonClasses =
-		'px-4 py-2 rounded-md text-sm font-medium transition-colors';
+		'px-4 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer';
 
 	return (
 		<>

@@ -1,13 +1,21 @@
-import { useState } from 'react';
 import ViewToggle from '../components/ViewToggle';
 import type { ViewMode } from '../types/Pokemon.types';
+import PokemonGrid from '../components/PokemonGrid';
+import { useSearchParams } from 'react-router';
 
 const PokemonListPage = () => {
-	const [viewMode, setViewMode] = useState<ViewMode>('pagination');
+	const [searchParams, setSearchParams] = useSearchParams();
+
+	const viewMode =
+		searchParams.get('view') === 'infinite' ? 'infinite' : 'pagination';
+
+	const setViewMode = (mode: ViewMode) => {
+		setSearchParams({ view: mode });
+	};
 
 	return (
 		<main
-			className={`py-12 min-h-screen transition-colors duration-300 ${
+			className={`py-12 md:px-24 px-12 min-h-screen transition-colors duration-300 ${
 				viewMode === 'pagination' ? 'bg-blue-50' : 'bg-emerald-50'
 			}`}
 		>
@@ -22,6 +30,7 @@ const PokemonListPage = () => {
 			<ViewToggle viewMode={viewMode} onChange={setViewMode} />
 
 			{/* Grid Views goes here */}
+			<PokemonGrid />
 		</main>
 	);
 };
