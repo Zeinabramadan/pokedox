@@ -1,20 +1,17 @@
 import PokemonCard from './PokemonCard';
 
-// dummy data till integrating with the api
-const pokemonItem = {
-	id: 1,
-	name: 'ksjhdgfs',
-	image: 'sdkfjhds',
-};
+import type { Pokemon } from '../types/pokemon.types';
 
-const PokemonGrid = () => {
+interface PokemonGridProps {
+	pokemon: Pokemon[];
+}
+
+const PokemonGrid = ({ pokemon }: PokemonGridProps) => {
 	return (
-		<section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 mt-4">
-			<PokemonCard
-				id={pokemonItem.id}
-				name={pokemonItem.name}
-				image={pokemonItem.image}
-			/>
+		<section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+			{pokemon.map((item) => (
+				<PokemonCard key={item.id} pokemon={item} />
+			))}
 		</section>
 	);
 };

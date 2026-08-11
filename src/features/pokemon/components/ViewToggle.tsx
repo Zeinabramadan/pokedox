@@ -1,4 +1,4 @@
-import type { ViewToggleProps } from '../types/Pokemon.types';
+import type { ViewToggleProps } from '../types/pokemon.types';
 
 const ViewToggle = ({ viewMode, onChange }: ViewToggleProps) => {
 	const baseButtonClasses =

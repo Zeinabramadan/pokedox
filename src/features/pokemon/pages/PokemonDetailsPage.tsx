@@ -6,12 +6,12 @@ const PokemonDetailsPage = () => {
 	return (
 		<main className="min-h-screen bg-gradient-to-b from-purple-50 to-pink-100 px-4 py-8 sm:px-6 lg:px-8">
 			<button
-					className="cursor-pointer mb-10 inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-800 shadow-sm transition hover:bg-slate-50"
-					onClick={() => navigate(-1)}
-				>
-					← Back to List
-				</button>
-      <div className="mx-auto max-w-5xl">
+				className="cursor-pointer mb-10 inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-800 shadow-sm transition hover:bg-slate-50"
+				onClick={() => navigate(-1)}
+			>
+				← Back to List
+			</button>
+			<div className="mx-auto max-w-5xl">
 				<section className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
 					<header className="bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-6 text-center text-white">
 						<h1 className="text-2xl font-bold sm:text-3xl">

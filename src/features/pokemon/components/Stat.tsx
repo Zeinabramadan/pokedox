@@ -1,4 +1,4 @@
-import type { StatProps } from '../types/Pokemon.types';
+import type { StatProps } from '../types/pokemon.types';
 
 const Stat = ({ label, value }: StatProps) => {
 	const percentage = `${(value / 100) * 100}%`;
