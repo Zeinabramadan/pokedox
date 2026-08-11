@@ -1,6 +1,7 @@
+import AppRouter from './routes/AppRouter';
 
 function App() {
-  return <div>Pokedex</div>
+	return <AppRouter />;
 }
 
 export default App;
