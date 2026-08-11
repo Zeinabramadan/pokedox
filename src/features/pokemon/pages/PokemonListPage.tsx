@@ -3,7 +3,10 @@ import type { ViewMode } from '../types/pokemon.types';
 import PokemonGrid from '../components/PokemonGrid';
 import { useSearchParams } from 'react-router';
 import { POKEMON_PAGE_SIZE } from '../constants';
+
 import { usePokemonList } from '../hooks/usePokemonList';
+import { usePokemonLoadMore } from '../hooks/usePokemonLoadMore';
+
 import { mapPokemonListItem } from '../utils/pokemon.utils';
 
 import Pagination from '../components/Pagination';
@@ -17,6 +20,35 @@ const PokemonListPage = () => {
 
 	const page =
 		viewMode === 'pagination' ? Number(searchParams.get('page')) || 1 : 1;
+
+	const paginationQuery = usePokemonList(page);
+
+	const loadMoreQuery = usePokemonLoadMore();
+
+	const paginationPokemon =
+		paginationQuery.data?.results.map(mapPokemonListItem) ?? [];
+
+	const loadMorePokemon =
+		loadMoreQuery.data?.pages.flatMap((page) =>
+			page.results.map(mapPokemonListItem)
+		) ?? [];
+
+	const pokemon = viewMode === 'infinite' ? loadMorePokemon : paginationPokemon;
+
+	const totalPages = Math.ceil(
+		(paginationQuery.data?.count ?? 0) / POKEMON_PAGE_SIZE
+	);
+
+	const isPending =
+		viewMode === 'infinite'
+			? loadMoreQuery.isPending
+			: paginationQuery.isPending;
+
+	const isError =
+		viewMode === 'infinite' ? loadMoreQuery.isError : paginationQuery.isError;
+
+	const error =
+		viewMode === 'infinite' ? loadMoreQuery.error : paginationQuery.error;
 
 	const handleViewChange = (mode: ViewMode) => {
 		if (mode === 'infinite') {
@@ -33,12 +65,6 @@ const PokemonListPage = () => {
 		});
 	};
 
-	const { data, isPending, isError } = usePokemonList(page);
-
-	const pokemon = data?.results.map(mapPokemonListItem) ?? [];
-
-	const totalPages = Math.ceil((data?.count ?? 0) / POKEMON_PAGE_SIZE);
-
 	const handlePageChange = (newPage: number) => {
 		setSearchParams({
 			view: viewMode,
@@ -51,17 +77,27 @@ const PokemonListPage = () => {
 		});
 	};
 
+	const handleRetry = () => {
+		if (viewMode === 'infinite') {
+			loadMoreQuery.refetch();
+			return;
+		}
+
+		paginationQuery.refetch();
+	};
+
 	return (
 		<main
-			className={`py-12 md:px-24 px-12 min-h-screen transition-colors duration-300 ${
+			className={`min-h-screen px-12 py-12 transition-colors duration-300 md:px-24 ${
 				viewMode === 'pagination' ? 'bg-blue-50' : 'bg-emerald-50'
 			}`}
 		>
 			<header className="text-center">
 				<h1 className="text-3xl font-bold text-slate-800">Pokedex</h1>
-				<p className="text-slate-500 my-3">
+
+				<p className="my-3 text-slate-500">
 					Discover & explore Pokémon with{' '}
-					{viewMode === 'pagination' ? 'page controls' : 'infinite scroll'}
+					{viewMode === 'pagination' ? 'page controls' : 'load more'}
 				</p>
 			</header>
 
@@ -75,18 +111,59 @@ const PokemonListPage = () => {
 				</div>
 			)}
 
-			{/* Grid Views goes here */}
+			{isError && (
+				<div className="flex min-h-100 flex-col items-center justify-center text-center">
+					<p className="text-lg font-semibold text-slate-800">
+						Something went wrong
+					</p>
+
+					<p className="mt-2 text-sm text-slate-500">
+						{error instanceof Error ? error.message : 'Failed to load Pokémon.'}
+					</p>
+
+					<button
+						type="button"
+						onClick={handleRetry}
+						className="mt-4 rounded-md bg-slate-900 px-5 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
+					>
+						Retry
+					</button>
+				</div>
+			)}
+
 			{!isPending && !isError && (
 				<div className="mt-4">
 					<PokemonGrid pokemon={pokemon} />
+
 					{viewMode === 'pagination' && (
 						<div className="mt-10">
 							<Pagination
 								currentPage={page}
 								totalPages={totalPages}
 								onPageChange={handlePageChange}
-								disabled={isPending}
+								disabled={paginationQuery.isFetching}
 							/>
+						</div>
+					)}
+
+					{viewMode === 'infinite' && (
+						<div className="mt-10 flex flex-col items-center gap-3">
+							{loadMoreQuery.hasNextPage ? (
+								<button
+									type="button"
+									disabled={loadMoreQuery.isFetchingNextPage}
+									onClick={() => loadMoreQuery.fetchNextPage()}
+									className="rounded-md px-6 py-3 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50"
+								>
+									{loadMoreQuery.isFetchingNextPage
+										? 'Loading...'
+										: 'Load More'}
+								</button>
+							) : (
+								<p className="text-sm text-slate-400">
+									You've reached the end.
+								</p>
+							)}
 						</div>
 					)}
 				</div>
