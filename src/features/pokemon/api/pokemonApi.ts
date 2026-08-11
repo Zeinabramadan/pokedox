@@ -1,4 +1,7 @@
-import type { PokemonListResponse } from '../types/pokemon.types';
+import type {
+	PokemonListResponse,
+	PokemonDetails,
+} from '../types/pokemon.types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -12,6 +15,18 @@ export const getPokemonList = async (
 
 	if (!response.ok) {
 		throw new Error('Failed to fetch Pokemon list');
+	}
+
+	return response.json();
+};
+
+export const getPokemonDetails = async (
+	pokemon: string
+): Promise<PokemonDetails> => {
+	const response = await fetch(`${API_BASE_URL}/pokemon/${pokemon}`);
+
+	if (!response.ok) {
+		throw new Error('Failed to fetch Pokémon details');
 	}
 
 	return response.json();

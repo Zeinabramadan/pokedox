@@ -1,4 +1,8 @@
-import type { Pokemon, PokemonListItemResponse } from '../types/pokemon.types';
+import type {
+	Pokemon,
+	PokemonDetails,
+	PokemonListItemResponse,
+} from '../types/pokemon.types';
 
 export const getPokemonIdFromUrl = (url: string): number => {
 	const parts = url.split('/').filter(Boolean);
@@ -21,3 +25,14 @@ export const mapPokemonListItem = (
 export const formatPokemonId = (id: number | string): string => {
 	return `#${String(id).padStart(3, '0')}`;
 };
+
+export const getPokemonImage = (pokemon: PokemonDetails): string =>
+	pokemon.sprites.other?.['official-artwork']?.front_default ??
+	pokemon.sprites.front_default ??
+	'';
+
+export const formatPokemonHeight = (height: number): string =>
+	`${height / 10} m`;
+
+export const formatPokemonWeight = (weight: number): string =>
+	`${weight / 10} kg`;
