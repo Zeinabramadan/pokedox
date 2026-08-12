@@ -3,6 +3,7 @@ interface PaginationProps {
 	totalPages: number;
 	onPageChange: (page: number) => void;
 	disabled?: boolean;
+	itemsShown?: number;
 }
 
 const Pagination = ({
@@ -10,6 +11,7 @@ const Pagination = ({
 	totalPages,
 	onPageChange,
 	disabled = false,
+	itemsShown,
 }: PaginationProps) => {
 	const getPageNumbers = () => {
 		if (totalPages <= 6) {
@@ -52,56 +54,61 @@ const Pagination = ({
 		'flex h-12 min-w-12 items-center justify-center rounded-md bg-slate-900 px-3 text-base font-medium text-white';
 
 	return (
-		<nav
-			aria-label="Pokemon pagination"
-			className="flex flex-wrap items-center justify-center gap-3"
-		>
-			{/* Previous */}
-			<button
-				type="button"
-				disabled={disabled || currentPage === 1}
-				onClick={() => onPageChange(currentPage - 1)}
-				className={`${buttonClass} px-5`}
+		<div className="flex flex-col items-center gap-2 m-4">
+			<nav
+				aria-label="Pokemon pagination"
+				className="flex flex-wrap items-center justify-center gap-3"
 			>
-				‹ Previous
-			</button>
+				{/* Previous */}
+				<button
+					type="button"
+					disabled={disabled || currentPage === 1}
+					onClick={() => onPageChange(currentPage - 1)}
+					className={`${buttonClass} px-5`}
+				>
+					‹ Previous
+				</button>
 
-			{/* Pages */}
-			{pages.map((page, index) => {
-				if (typeof page !== 'number') {
+				{/* Pages */}
+				{pages.map((page, index) => {
+					if (typeof page !== 'number') {
+						return (
+							<span
+								key={`${page}-${index}`}
+								className="flex h-12 min-w-6 items-center justify-center text-slate-500"
+							>
+								...
+							</span>
+						);
+					}
+
 					return (
-						<span
-							key={`${page}-${index}`}
-							className="flex h-12 min-w-6 items-center justify-center text-slate-500"
+						<button
+							key={page}
+							type="button"
+							disabled={disabled}
+							onClick={() => onPageChange(page)}
+							className={page === currentPage ? activeButtonClass : buttonClass}
 						>
-							...
-						</span>
+							{page}
+						</button>
 					);
-				}
+				})}
 
-				return (
-					<button
-						key={page}
-						type="button"
-						disabled={disabled}
-						onClick={() => onPageChange(page)}
-						className={page === currentPage ? activeButtonClass : buttonClass}
-					>
-						{page}
-					</button>
-				);
-			})}
-
-			{/* Next */}
-			<button
-				type="button"
-				disabled={disabled || currentPage === totalPages}
-				onClick={() => onPageChange(currentPage + 1)}
-				className={`${buttonClass} px-5`}
-			>
-				Next ›
-			</button>
-		</nav>
+				{/* Next */}
+				<button
+					type="button"
+					disabled={disabled || currentPage === totalPages}
+					onClick={() => onPageChange(currentPage + 1)}
+					className={`${buttonClass} px-5`}
+				>
+					Next ›
+				</button>
+			</nav>
+			<p className="text-sm text-slate-500">
+				Page {currentPage} of {totalPages} ({itemsShown} Pokemon shown)
+			</p>
+		</div>
 	);
 };
 

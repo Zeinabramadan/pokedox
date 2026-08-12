@@ -36,3 +36,9 @@ export const formatPokemonHeight = (height: number): string =>
 
 export const formatPokemonWeight = (weight: number): string =>
 	`${weight / 10} kg`;
+
+export const formatStatName = (value: string): string => {
+	const formatted = value.replace(/^special-/, 'Sp. ').replace(/-/g, ' ');
+
+	return formatted.replace(/\b\w/g, (char) => char.toUpperCase());
+};

@@ -142,6 +142,7 @@ const PokemonListPage = () => {
 								totalPages={totalPages}
 								onPageChange={handlePageChange}
 								disabled={paginationQuery.isFetching}
+								itemsShown={paginationPokemon.length}
 							/>
 						</div>
 					)}
@@ -153,7 +154,7 @@ const PokemonListPage = () => {
 									type="button"
 									disabled={loadMoreQuery.isFetchingNextPage}
 									onClick={() => loadMoreQuery.fetchNextPage()}
-									className="rounded-md px-6 py-3 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50"
+									className="cursor-pointer rounded-md px-6 py-3 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50"
 								>
 									{loadMoreQuery.isFetchingNextPage
 										? 'Loading...'
@@ -164,6 +165,9 @@ const PokemonListPage = () => {
 									You've reached the end.
 								</p>
 							)}
+							<p className="text-sm text-slate-500">
+								Showing {loadMorePokemon.length} Pokemon
+							</p>
 						</div>
 					)}
 				</div>

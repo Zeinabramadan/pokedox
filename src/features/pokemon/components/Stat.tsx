@@ -1,4 +1,5 @@
 import type { StatProps } from '../types/pokemon.types';
+import { formatStatName } from '../utils/pokemon.utils';
 
 const Stat = ({ label, value }: StatProps) => {
 	const percentage = `${(value / 100) * 100}%`;
@@ -6,7 +7,9 @@ const Stat = ({ label, value }: StatProps) => {
 	return (
 		<div>
 			<div className="mb-1 flex items-center justify-between text-sm">
-				<span className="font-medium text-slate-700">{label}</span>
+				<span className="font-medium text-slate-700">
+					{formatStatName(label)}
+				</span>
 
 				<span className="text-slate-500">{value}</span>
 			</div>
