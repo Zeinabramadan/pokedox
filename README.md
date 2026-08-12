@@ -10,6 +10,8 @@ The app demonstrates a project structure with:
 - pagination and infinite loading views
 - detailed Pokémon page
 
+> **Live DEMO** deployed on: https://pokedox-five.vercel.app/
+
 ## Prerequisites
 
 Before running the project, make sure you have:
